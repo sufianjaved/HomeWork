@@ -41,7 +41,7 @@ public class AsteroidsStepDefinitions{
     }
 
     @When("a user retrieves the Trajectory Details by date range {string} and {string} and dist-max as {string}")
-    public void a_user_retrieves_the_trajectory_details_by_date_range(String date_min, String date_max, String dist_max){
+    public void a_user_retrieves_the_trajectory_details_by_date_range_and_dist_max(String date_min, String date_max, String dist_max){
         request.when()
                 .param("date-min", date_min) //1990-01-01
                 .param("date-max", date_max) //1999-12-31
