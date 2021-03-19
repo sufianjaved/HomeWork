@@ -18,7 +18,6 @@ import utils.ApplicationConfiguration;
 import static constant.ScenarioNameConstant.*;
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
-import static org.hamcrest.CoreMatchers.containsString;
 
 public class HelloServiceStepDefinitions {
 

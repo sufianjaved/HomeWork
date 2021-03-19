@@ -1,15 +1,11 @@
 package utils;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
-
-import static io.restassured.config.RestAssuredConfig.config;
 
 public class DefaultConfiguration {
 
