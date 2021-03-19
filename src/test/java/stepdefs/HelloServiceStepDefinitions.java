@@ -18,10 +18,11 @@ import utils.ApplicationConfiguration;
 import static constant.ScenarioNameConstant.*;
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class HelloServiceStepDefinitions {
 
-    private static final Logger log = LoggerFactory.getLogger(AsteroidsStepDefinitions.class);
+    private static final Logger log = LoggerFactory.getLogger(HelloServiceStepDefinitions.class);
     private ResponseSpecification response;
     private RequestSpecification request;
 
@@ -31,7 +32,7 @@ public class HelloServiceStepDefinitions {
         request = new RequestSpecBuilder()
                 .setBaseUri(ApplicationConfiguration.getLocalhostBaseUrl())
                 .setPort(port)
-                .setContentType(ContentType.JSON)
+                .setContentType(ContentType.TEXT)
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter())
                 .addFilter(new ErrorLoggingFilter())
@@ -44,23 +45,14 @@ public class HelloServiceStepDefinitions {
                 spec(request).
                 get("/{appendedValue}");
     }
+
     @Then("verify the response body text includes {string}")
     public void verify_the_response_body_text_includes(String testString) {
         log.info(VALIDATE_RESPONSE_BODY);
-        /*
-                given().pathParam("test", testString).when().
-                spec(request).
-                        get("/{test}").
-                then().
-                assertThat().
-                statusCode(SC_OK).
-                body(containsString(testString));
-*/
         response = new ResponseSpecBuilder()
                 .expectStatusCode(SC_OK)
-                .expectContentType(ContentType.JSON)
+                .expectContentType(ContentType.TEXT)
+                .expectBody(containsString("Hi there, "+testString+"!"))
                 .build();
-
     }
-
 }
