@@ -4,25 +4,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.ErrorLoggingFilter;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ApplicationConfiguration;
 
 import static constant.ScenarioNameConstant.*;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
 
 public class HelloServiceStepDefinitions {
 
     private static final Logger log = LoggerFactory.getLogger(HelloServiceStepDefinitions.class);
-    private ResponseSpecification response;
     private RequestSpecification request;
     private Response responseObject;
 
@@ -33,21 +28,21 @@ public class HelloServiceStepDefinitions {
                 .setBaseUri(ApplicationConfiguration.getLocalhostBaseUrl())
                 .setPort(port)
                 .setContentType(ContentType.TEXT)
-                .addFilter(new RequestLoggingFilter())
-                .addFilter(new ResponseLoggingFilter())
-                .addFilter(new ErrorLoggingFilter())
                 .build();
     }
 
     @When("a user calls the service with {string}")
     public void a_user_calls_the_service_with(String inputText) {
-        response = given(request).pathParam("appendedValue", inputText)
-        .then();
-        response.expect().body(containsString("Hi there, "+inputText+"!"));
+        responseObject = given().
+                spec(request).
+                when().
+                get(inputText);
     }
 
-    @Then("verify the response is {int}")
-    public void verify_the_response_is(int expectedCode) {
-        response.expect().statusCode(expectedCode);
+    @Then("verify the response code is {int} and body contains welcome message for {string}")
+    public void verify_the_response_code_is_and_body_contains_welcome_message_for(int expectedCode, String inputText) {
+        String message = responseObject.getBody().asString();
+        assertTrue("Service welcome message issue : ", message.equals("Hi there, " + inputText + "!"));
+        assertEquals("Service response code issue : ", responseObject.statusCode(), expectedCode);
     }
 }

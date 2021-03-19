@@ -6,9 +6,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.filter.log.ErrorLoggingFilter;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -34,18 +31,15 @@ public class AsteroidsStepDefinitions{
         request = new RequestSpecBuilder()
                 .setBaseUri(ApplicationConfiguration.getHostBaseUrl())
                 .setContentType(ContentType.JSON)
-                .addFilter(new RequestLoggingFilter())
-                .addFilter(new ResponseLoggingFilter())
-                .addFilter(new ErrorLoggingFilter())
                 .build();
     }
 
     @When("a user retrieves the Trajectory Details by date range {string} and {string} and dist-max as {string}")
     public void a_user_retrieves_the_trajectory_details_by_date_range_and_dist_max(String date_min, String date_max, String dist_max){
         request.when()
-                .param("date-min", date_min) //1990-01-01
-                .param("date-max", date_max) //1999-12-31
-                .param("dist-max", dist_max); //0.01
+                .param("date-min", date_min)
+                .param("date-max", date_max)
+                .param("dist-max", dist_max);
     }
 
     @Then("verify the statusCode and contentType")
@@ -62,7 +56,6 @@ public class AsteroidsStepDefinitions{
         log.info(VALIDATE_RESPONSE_BODY);
         Response responseObject = given()
                 .spec(request).get();
-
         responseObject
                 .then()
                 .body("count", equalTo(count));
