@@ -4,11 +4,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.slf4j.Logger;
@@ -17,7 +17,6 @@ import utils.ApplicationConfiguration;
 
 import static constant.ScenarioNameConstant.*;
 import static io.restassured.RestAssured.given;
-import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.CoreMatchers.containsString;
 
 public class HelloServiceStepDefinitions {
@@ -25,9 +24,10 @@ public class HelloServiceStepDefinitions {
     private static final Logger log = LoggerFactory.getLogger(HelloServiceStepDefinitions.class);
     private ResponseSpecification response;
     private RequestSpecification request;
+    private Response responseObject;
 
     @Given("Hello service running on localhost port {int}")
-    public void hello_service_running_on_localhost(int port) {
+    public void hello_service_running_on_localhost_port(int port) {
         log.info(BASE_SETUP);
         request = new RequestSpecBuilder()
                 .setBaseUri(ApplicationConfiguration.getLocalhostBaseUrl())
@@ -40,19 +40,14 @@ public class HelloServiceStepDefinitions {
     }
 
     @When("a user calls the service with {string}")
-    public void a_user_calls_the_service_on_port_with(String inputText) {
-        given().pathParam("appendedValue", inputText).when().
-                spec(request).
-                get("/{appendedValue}");
+    public void a_user_calls_the_service_with(String inputText) {
+        response = given(request).pathParam("appendedValue", inputText)
+        .then();
+        response.expect().body(containsString("Hi there, "+inputText+"!"));
     }
 
-    @Then("verify the response body text includes {string}")
-    public void verify_the_response_body_text_includes(String testString) {
-        log.info(VALIDATE_RESPONSE_BODY);
-        response = new ResponseSpecBuilder()
-                .expectStatusCode(SC_OK)
-                .expectContentType(ContentType.TEXT)
-                .expectBody(containsString("Hi there, "+testString+"!"))
-                .build();
+    @Then("verify the response is {int}")
+    public void verify_the_response_is(int expectedCode) {
+        response.expect().statusCode(expectedCode);
     }
 }

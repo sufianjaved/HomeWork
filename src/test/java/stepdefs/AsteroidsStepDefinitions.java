@@ -60,10 +60,11 @@ public class AsteroidsStepDefinitions{
     @And("response includes the count {string}")
     public void response_includes_the_following_count(String count) {
         log.info(VALIDATE_RESPONSE_BODY);
-        Response responseObject = given().
-                spec(request).get();
-        responseObject.
-                then().
-                body("count", equalTo(count));
+        Response responseObject = given()
+                .spec(request).get();
+
+        responseObject
+                .then()
+                .body("count", equalTo(count));
     }
 }
