@@ -37,6 +37,7 @@ You can find the Serenity HTML reports in the following directory of the Project
 
 Under the site-reports directory, open ‘index.html’ and serenity-summary.html file to view reports.
 
-![image](https://user-images.githubusercontent.com/62514722/111850049-fd894780-8930-11eb-964e-f812a31b79f9.png)
-![image](https://user-images.githubusercontent.com/62514722/111850104-23165100-8931-11eb-97e3-26452c63e372.png)
+![image](https://user-images.githubusercontent.com/62514722/111883602-3d5a3880-89de-11eb-9a83-b8209ff70d30.png)
+![image](https://user-images.githubusercontent.com/62514722/111883649-7b575c80-89de-11eb-91a3-84bf9ecaee71.png)
+
 
