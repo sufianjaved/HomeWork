@@ -5,32 +5,31 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.ApplicationConfiguration;
 
 import static constant.ScenarioNameConstant.*;
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class AsteroidsStepDefinitions{
+public class AsteroidsStepdefs {
 
-    private static final Logger log = LoggerFactory.getLogger(AsteroidsStepDefinitions.class);
-    private ResponseSpecification response;
+    private static final Logger log = LoggerFactory.getLogger(AsteroidsStepdefs.class);
     private RequestSpecification request;
+    private Response responseObject;
 
     @Given("a Trajectory exists")
     public void a_trajectory_exists(){
         log.info(BASE_SETUP);
+
         request = new RequestSpecBuilder()
                 .setBaseUri(ApplicationConfiguration.getHostBaseUrl())
-                .setContentType(ContentType.JSON)
+                .setContentType(JSON)
                 .build();
     }
 
@@ -40,24 +39,19 @@ public class AsteroidsStepDefinitions{
                 .param("date-min", date_min)
                 .param("date-max", date_max)
                 .param("dist-max", dist_max);
-    }
-
-    @Then("verify the statusCode and contentType")
-    public void verify_the_statusCode_and_contentType(){
-        log.info(VERIFY_STATUS_CODE_200_AND_CONTENT_TYPE_JSON);
-        response = new ResponseSpecBuilder()
-                .expectStatusCode(SC_OK)
-                .expectContentType(ContentType.JSON)
-                .build();
-    }
-
-    @And("response includes the count {string}")
-    public void response_includes_the_following_count(String count) {
-        log.info(VALIDATE_RESPONSE_BODY);
-        Response responseObject = given()
+        responseObject = given()
                 .spec(request).get();
+    }
+
+    @Then("verify the statusCode and contentType and {string}")
+    public void verify_the_statusCode_and_contentType_and_countInResponseBody(String count){
+        log.info(VERIFY_STATUS_CODE_200_AND_CONTENT_TYPE_JSON);
+        log.info(VALIDATE_RESPONSE_BODY);
+
         responseObject
                 .then()
-                .body("count", equalTo(count));
+                .body("count", equalTo(count))
+                .contentType(JSON)
+                .statusCode(SC_OK);
     }
 }

@@ -53,7 +53,7 @@
             <version>4.3.3</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.serenity-bdd/serenity-core -->
+
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
@@ -79,7 +79,6 @@
             <artifactId>log4j-core</artifactId>
             <version>2.14.0</version>
         </dependency>
-
     </dependencies>
 
 
