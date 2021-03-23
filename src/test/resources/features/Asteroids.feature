@@ -8,7 +8,7 @@ Then verify the statusCode and contentType and "<countInResponseBody>"
 Examples:
 | date_min      | date_max      | countInResponseBody   |
 | 1990-01-01    | 1999-12-31    | 50                    |
-| 2000-01-01    | 2009-12-31    | 373                   |
+| 2000-01-01    | 2009-12-31    | 374                   |
 | 2010-01-01    | 2019-12-31    | 1618                  |
 
  # Test cases Example cases details provided below:
